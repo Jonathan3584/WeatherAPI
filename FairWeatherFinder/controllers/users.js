@@ -1,5 +1,5 @@
 //user model
-const User = require('../models/user');
+const User = require('../models/users');
 //express route
 const router = require('express').Router();
 //auth setup

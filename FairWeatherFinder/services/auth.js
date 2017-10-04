@@ -1,7 +1,7 @@
 //passport
 const passport = require('passport');
 //user model
-const User = require('../models/user');
+const User = require('../models/users');
 //local strategy for registration
 const LocalStrategy = require('passport-local').Strategy;
 //bcrypt authentication

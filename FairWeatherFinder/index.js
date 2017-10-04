@@ -6,11 +6,14 @@ const PORT = process.env.PORT || 8080;
 
 //npm library setup
 const mustacheExpress = require('mustache-express');
-const bodyParser     = require('body-parser');
+const bodyParser  = require('body-parser');
 const morgan = require('morgan');
 const pgp = require('pg-promise')();
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const dotenv = require('dotenv');
+
+
 
 //auth and passport setup
 app.use(session({
