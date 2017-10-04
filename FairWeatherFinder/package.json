@@ -1,0 +1,24 @@
+{
+  "name": "perfect-day",
+  "version": "1.0.0",
+  "description": "weather-api-app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jonathan Ellsaesser",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "cheerio": "^1.0.0-rc.2",
+    "cookie-parser": "^1.4.3",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.1",
+    "morgan": "^1.9.0",
+    "mustache-express": "^1.2.5",
+    "passport": "^0.4.0",
+    "pg-promise": "^6.10.2",
+    "restify": "^6.0.1",
+    "winston": "^2.4.0"
+  }
+}
