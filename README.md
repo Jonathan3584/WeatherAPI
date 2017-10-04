@@ -62,3 +62,9 @@ Cookie-parser
 Bcrypt
 Cookie-parser
 RESTify
+
+Wire Frames:
+Landing page: https://wireframe.cc/EHPtES
+Weather profile: https://wireframe.cc/U1NuJh
+Location and time inputs: https://wireframe.cc/hCBlRk
+Example return: https://wireframe.cc/eEbLNm
