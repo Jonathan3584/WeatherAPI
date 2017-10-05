@@ -7,26 +7,27 @@ const passport = require('passport');
 const auth = require('../services/auth');
 
 
-//Create new user row
-router.post('/', passport.authenticate(
-        'local-signup', {
-            failureRedirect: '/users/new',
-            successRedirect: '/auth'
-        }
-    )
-);
-
-//register new user
+//render new user sign-up
 router.get('/new', (req, res) => {
   res.render('users/new');
 });
+
+
+//Create new user row in db
+router.post('/new', passport.authenticate(
+        'local-signup', {
+            failureRedirect: '/new',
+            successRedirect: '/climate'
+        }
+    )
+);
 
 // Post to login (params are username/password).
 router.post('/login',
   passport.authenticate(
     'local-login', {
         failureRedirect: '/',
-        successRedirect: '/auth'
+        successRedirect: '/climate'
     }
 ));
 

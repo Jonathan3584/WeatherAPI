@@ -12,6 +12,7 @@ const pgp = require('pg-promise')();
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
+const axios = require('axios');
 
 
 
@@ -34,6 +35,8 @@ app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+//method override
+app.use(require('express-method-override')('method_override_param_name'));
 //views and static assets setup
 app.engine('html', mustacheExpress());
 app.set('view engine', 'html');
@@ -46,7 +49,8 @@ app.get('/', (req, res) => {
 });
 
 //controllers setup
-app.use('/auth/', require('./controllers/users'));
+app.use('/climate/', require('./controllers/climate'));
+app.use('/users/', require('./controllers/users'));
 
 //start app
 app.listen(PORT, () => console.log('Server is listening on port', PORT));

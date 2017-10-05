@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	 <link rel="stylesheet" href="/style.css">
+    <script type="text/javascript" src="/jquery.js"></script>
+    <script type="text/javascript" src="/script.js"></script>
+	<title></title>
+</head>
+<body>
+	<div id="container">
+	<h1 class="{{id}}" id="editHeader">Update Your Climate Profile {{id}}</h1>
+	<form id="editProfileForm">
+		<label for="hiTemp">High Temperature</label>
+		<input placeholder="70" name="hiTemp" id="hiTemp" type="text">
+		<br>
+		<label for="loTemp">Low Temperature</label>
+		<input placeholder="55" name="loTemp" id="loTemp" type="text">
+		<br>
+		<label for="precipitation">How much does rain bother you?</label>
+		<select name="precipitation" id="precipitation">
+  		<option value="4">Keep me dry!</option>
+  		<option value="3">I'd really rather not</option>
+  		<option value="2">Meh</option>
+  		<option value="1">I barely notice!</option>
+		</select>
+		<br>
+		<label for="humidity">Humidity Averse?</label>
+		<select name="humidity" id="humidity">
+  		<option value="4">Keep me dry!</option>
+  		<option value="3">I'd really rather not</option>
+  		<option value="2">Meh</option>
+  		<option value="1">I barely notice!</option>
+		</select>
+		<br>
+		<label for="windConditions">Begone with the wind?</label>
+		<select name="windConditions" id="windConditions">
+  		<option value="4">Keep me still!</option>
+  		<option value="3">I'd really rather not</option>
+  		<option value="2">Meh</option>
+  		<option value="1">I barely notice!</option>
+		</select>
+		<br>
+		<label for="cloudConditions">Cloud Conditions</label>
+		<select name="cloudConditions" id="cloudConditions">
+  		<option value="4">Sunny</option>
+  		<option value="3">Partly Cloudy</option>
+  		<option value="2">Mostly Cloudy</option>
+  		<option value="1">Overcast</option>
+		</select>
+		<br>
+		<button type="submit">Submit</button>
+
+	</form>
+	</div>
+</body>
+</html>

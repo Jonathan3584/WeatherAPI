@@ -11,7 +11,7 @@
 <body>
 	<div id="container">
 	<h1>Your Climate Profile</h1>
-	<form id="profileForm">
+	<form action="./new" method="POST" id="profileForm">
 		<label for="profileName">Profile Name</label>
 		<input placeholder="Spring Break" name="profileName" id="profileName" type="text">
 		<br>
@@ -47,10 +47,10 @@
 		<br>
 		<label for="cloudConditions">Cloud Conditions</label>
 		<select name="cloudConditions" id="cloudConditions">
-  		<option value="sunny">Sunny</option>
-  		<option value="partlyCloudy">Partly Cloudy</option>
-  		<option value="mostlyCloudy">Mostly Cloudy</option>
-  		<option value="overcast">Overcast</option>
+  		<option value="4">Sunny</option>
+  		<option value="3">Partly Cloudy</option>
+  		<option value="2">Mostly Cloudy</option>
+  		<option value="1">Overcast</option>
 		</select>
 		<br>
 		<button type="submit">Submit</button>

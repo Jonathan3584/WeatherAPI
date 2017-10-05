@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/style.css">
+    <script type="text/javascript" src="/jquery.js"></script>
+    <script type="text/javascript" src="/script.js"></script>
+    <title>Welcome</title>
+</head>
+
+<body>
+    <div>
+        <h1 class="">Welcome!</h1>
+        <p>Select a profile or create a new one and we'll get started!</p>
+        {{#profiles}}
+        <div>
+          <a href="climate/profiles/{{id}}">{{name}}</a>
+        </div>
+
+        {{/profiles}}
+        <a href="climate/profiles/new">New Profile</a>
+            
+        </div>
+    </div>
+</body>
+
+</html>

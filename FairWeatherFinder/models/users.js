@@ -23,7 +23,7 @@ User.findByEmail = (email) => {
 User.findByEmailMiddleware = (req, res, next) => {
   const email = req.user.email;
   User
-    .findByEmail(email) // here we're using the nonmiddleware version above, getting back a promise
+    .findByEmail(email)
     .then((userData) => {
       res.locals.userData = userData;
       next();

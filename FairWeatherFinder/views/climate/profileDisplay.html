@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/style.css">
+    <script type="text/javascript" src="/jquery.js"></script>
+    <script type="text/javascript" src="/script.js"></script>
+    <title>{{name}}</title>
+</head>
+
+<body>
+  {{#profile}}
+    <div>
+        <h1 class="">{{name}}</h1>
+        <div>{{hitemp}} is the most I enjoy!</div>
+        <div>Below {{lotemp}} and I'll freeze!</div>
+        <div>
+            <a href="./{{id}}/query">Use this profile!</a>
+        </div>
+        <div>
+            <a href="./{{id}}/edit">Edit profile</a>
+        </div>
+        <div>
+            <button id="deleteButton" class="{{id}}">Delete profile</button>
+        </div>
+    </div>
+    {{/profile}}
+</body>
+
+</html>
