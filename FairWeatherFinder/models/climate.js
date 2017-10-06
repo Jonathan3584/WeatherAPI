@@ -23,6 +23,9 @@ const climate = {};
 let lat = 0;
 let long = 0;
 
+//weather object to compare to profile
+const weatherObject = {};
+
 //Tims' numeric parameters checker -- thanks Tims!
 function numericParam(reqParams, parameterName) {
     if (typeof parameterName !== 'string') {
@@ -73,8 +76,8 @@ climate.createNewProfile = (req, res, next) => {
         hiTemp = req.body.hiTemp,
         loTemp = req.body.loTemp,
         precip = req.body.precipitation,
-        maxWind = req.body.windConditions,
-        cloudCover = req.body.cloudConditions,
+        maxWind = req.body.maxWind,
+        cloudCover = req.body.cloudCover,
         humidity = req.body.humidity;
     db.one(
         'INSERT INTO profiles (user_id, name, hiTemp, loTemp, precip, maxWind, cloudCover, humidity) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) returning id', [user_id, name, hiTemp, loTemp, precip, maxWind, cloudCover, humidity]
@@ -136,20 +139,26 @@ climate.convertAddress = (req, res, next) => {
 };
 //axios call to DARK SKY API to retrieve a block of data
 climate.getWeatherData = (req, res, next) => {
-    const date = req.body.date;
-    console.log('firing in getWeatherData', date);
-    const unixDate = moment(`${date} 12:00`, "YYYY/M/D H:mm").unix();
-    console.log(unixDate);
-    // axios({
-    //     url: `${darkskiesUrl}${darkSkiesApiKey}/${lat},${long},${date}`,
-    //     method: 'GET'
-    // }).then(weatherData => {
-    //     console.log(weatherData);
-    //     //FORMAT AND SEND RELEVANT DATA POINTS TO COMPARE WITH PROFILE
-    //     next();
-    // });
-
-};
+		const startDate = req.body.startDate;
+    const unixDate = moment(`${startDate} 12:00`, "YYYY/M/D H:mm").unix();
+        axios({
+            url: `${darkSkiesUrl}${darkSkiesApiKey}/${lat},${long},${unixDate}`,
+            method: 'GET'
+        }).then(weatherData => {
+            const dailyData = weatherData.data.daily.data[0];
+            weatherObject.hiTemp = dailyData.temperatureMax;
+            weatherObject.loTemp = dailyData.temperatureMin;
+            weatherObject.precip = dailyData.precipIntensityMax;
+            weatherObject.maxWind = dailyData.windSpeed;
+            weatherObject.humidity = dailyData.humidity;
+            weatherObject.cloudCover = dailyData.cloudCover;
+            weatherObject.icon = dailyData.icon;
+            console.log(weatherObject);
+            next();
+        }).catch(err => {
+            console.error(`error in climate.getWeatherData: ${err}`)
+        });
+    };
 
 
 

@@ -9,8 +9,8 @@ $('#editProfileForm').on('submit', e => {
           loTemp = $('#loTemp').val(),
           precipitation = $('#precipitation').val(),
           humidity = $('#humidity').val(),
-          maxWind = $('#windConditions').val(),
-          cloudConditions = $('#cloudConditions').val();
+          maxWind = $('#maxWind').val(),
+          cloudCover = $('#cloudCover').val();
     const editedProfileData = {
       id: id, 
       hiTemp: hiTemp, 
@@ -18,7 +18,7 @@ $('#editProfileForm').on('submit', e => {
       precipitation: precipitation, 
       maxWind: maxWind,
       humidity: humidity,
-      cloudConditions: cloudConditions
+      cloudCover: cloudCover
     };
     $.ajax({
       method: 'PUT',
@@ -69,12 +69,13 @@ $('#queryFormAdd').on('submit', e => {
 $('#queryFormDate').on('submit', e => {
     e.preventDefault();
     const id = $('#dateHeader').attr('class');
-    const date = $('#dateInput').val();
-    console.log(date);
+    const dates = {startDate: $('#startDateInput').val(),
+                  endDate: $('#endDateInput').val()};
+    console.log(dates);
     $.ajax({
       method: 'POST',
       url: `/climate/profiles/${id}/query/2`,
-      data: date,
+      data: dates,
       success: response => {
         window.location.replace(`/climate/profiles/${id}/results`)
       }, error: msg => {
