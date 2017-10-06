@@ -9,23 +9,15 @@
 	<title>Location</title>
 </head>
 <body>
-	<h1>Where are we looking into?</h1>
+	<h1 id="addressHeader" class={{id}}>Where are we looking into?</h1>
 
 	<p>A note about addresses -- the API behind this site is pretty good at what it does, but make sure your address is in standard Postal format.</p>
-	<form action="query" method ="GET" id="queryForm">
+	<form action="query" method ="GET" id="queryFormAdd">
 
-		<label for="address">Address(es)</label>
-		<input placeholder="10 E 21st St, New York, NY 10010" name="address1" id="address1" type="text">
+		<label for="address">Address</label>
+		<input placeholder="10 E 21st St, New York, NY 10010" name="address" id="addressInput" type="text">
 		<br>
-		<input placeholder="Optional" name="address2" id="address2" type="text">
-		<br>
-		<input placeholder="Optional" name="address3" id="address3" type="text">
-		<br>
-		<input placeholder="Optional" name="address4" id="address4" type="text">
-		<br>
-		<input placeholder="Optional" name="address5" id="address5" type="text">
-		<br>
-		
-	
+		<button type="submit">Use this address</button>
+	</form>	
 </body>
 </html>

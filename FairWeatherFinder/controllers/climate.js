@@ -53,21 +53,40 @@ router.delete('/profiles/:profileId',
 	auth.restrict,
 	climate.delete,
 	(req, res) => {
-		console.log("router.delete firing");
 	res.render('climate/index');
 	});
-
-
-router.get('/profiles/:profileId/query', (req, res) => {
-//REFORMAT ADDRESS DATA -- google api
+//render first query form
+router.get('/profiles/:profileId/query',
+	(req, res) => {
+		auth.restrict,
+		res.render('climate/queryAdd', {id: req.params.profileId});
+	});
+//reformat address -- google api
+router.post('/profiles/:profileId/query/', 
+	auth.restrict,
+	climate.convertAddress,
+	(req, res) => {
 res.render('climate/queryDate');
 	});
-
-router.get('/profiles/:profileId/query', (req, res) => {
-//RETRIEVE WEATHER DATA -- dksky api
-res.render('climate/result');
+//render second query form
+router.get('/profiles/:profileId/query/2',
+	auth.restrict,
+	(req, res) => {
+	res.render('climate/queryDate', {id: req.params.profileId});
 	});
-
+//retrieve weather data -- dark skies api
+router.post('/profiles/:profileId/query/2', 
+	auth.restrict,
+	climate.getWeatherData,
+	(req, res) => {
+res.render('climate/result');
+});
+//render results page
+router.get('/profiles/:profileId/results',
+	auth.restrict,
+	(req, res) => {
+	res.render('climate/result', {id: req.params.profileId});
+	});
 
 
 
