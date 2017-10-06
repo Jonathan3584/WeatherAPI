@@ -20,11 +20,6 @@ for (let i = 0; i < callLength; i++) {
 }
 
 axios.all(weatherPromises)
-.then(axios.spread((   ) => {
-    for (let i = 0; i < args.length; i++){
-
-    }
-})
 .then(weatherData => {
         const dailyData = weatherData.data.daily.data[0];
         weatherObject.hiTemp = dailyData.temperatureMax;
