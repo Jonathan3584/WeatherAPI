@@ -84,9 +84,17 @@ res.render('climate/result');
 //render results page
 router.get('/profiles/:profileId/results',
 	auth.restrict,
+	climate.filterWeatherData,
 	(req, res) => {
 	res.render('climate/result', {id: req.params.profileId});
 	});
+//filter data
+// router.post('/profiles/:profileId/results',
+// 	auth.restrict,
+// 	climate.filterWeatherData,
+// 	(req, res) => {
+// 	res.render('climate/result', {id: req.params.profileId});
+// 	});
 
 
 

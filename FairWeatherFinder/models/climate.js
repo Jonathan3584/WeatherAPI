@@ -23,11 +23,19 @@ const climate = {};
 let lat = 0;
 let long = 0;
 
-//weather object to compare to profile
+//weather arrray and results object to compare to profile
 const weatherArray = [];
+const resultObject = {};
 
+//generic average function
+average = (array) => {
+	let arrSum = array.reduce((sum, value) => {
+		return sum + value; 
+	}, 0);
+	return arrSum/array.length;
+};
 //Tims' numeric parameters checker -- thanks Tims!
-function numericParam(reqParams, parameterName) {
+numericParam = (reqParams, parameterName) => {
     if (typeof parameterName !== 'string') {
         throw new Error('parameterName must be a string!')
     }
@@ -41,12 +49,11 @@ function numericParam(reqParams, parameterName) {
     }
     return param;
 };
-
-
-//PULL ALL EXISTENT PROFILES FROM THE DATABASE
+//find all profiles to populate user page
 climate.findAllProfiles = (req, res, next) => {
+	const user_id = req.user.id;
     db.manyOrNone(
-        'SELECT * FROM profiles'
+        'SELECT * FROM profiles WHERE user_id = $1', [user_id]
     ).then(profiles => {
         res.locals.profiles = profiles;
         next();
@@ -54,7 +61,6 @@ climate.findAllProfiles = (req, res, next) => {
         console.error(`error in climate.findAllProfiles: ${err}`)
     });
 };
-
 //db call to get profile by name
 climate.findProfileById = (req, res, next) => {
     const id = numericParam(req.params, "profileId");
@@ -64,12 +70,10 @@ climate.findProfileById = (req, res, next) => {
         res.locals.profile = profile;
         next();
     }).catch(err => {
-        console.error('error in the climate.findProfileById: ${err}')
+        console.error(`error in the climate.findProfileById: ${err}`)
     });
 };
-
-//PUT THE PROFILE FORM INTO THE PROFILE DATABASE
-//RETURN profile ID
+//create new profile in database
 climate.createNewProfile = (req, res, next) => {
     const user_id = req.user.id,
         name = req.body.profileName,
@@ -149,7 +153,6 @@ climate.getWeatherData = (req, res, next) => {
 
     let weatherPromises = [];
 
-
     for (let i = 0; i < callLength; i++) {
         let unixDate = unixStartDate + i * 84600;
         weatherPromises.push(
@@ -161,7 +164,7 @@ climate.getWeatherData = (req, res, next) => {
     };
 
     axios.all(weatherPromises).then(results => {
-    	results.forEach((response) => {
+    	results.forEach(response => {
         	weatherObject = {};
             const dailyData = response.data.daily.data[0];
             weatherObject.hiTemp = dailyData.temperatureMax;
@@ -173,16 +176,44 @@ climate.getWeatherData = (req, res, next) => {
             weatherObject.icon = dailyData.icon;
             console.log(weatherObject);
             weatherArray.push(weatherObject);
+        });
+				resultObject.hiTemp = average(weatherArray.map(element => {
+    			return element.hiTemp
+    		}));
+    		resultObject.loTemp = average(weatherArray.map(element => {
+    			return element.loTemp
+    		}));
+    		resultObject.precip = average(weatherArray.map(element => {
+    			return element.precip
+    		}));
+    		resultObject.maxWind = average(weatherArray.map(element => {
+    			return element.maxWind
+    		}));
+    		resultObject.humidity = average(weatherArray.map(element => {
+    			return element.humidity
+    		}));
+    		resultObject.cloudCover = average(weatherArray.map(element => {
+    			return element.cloudCover
+    		}));
+    		console.log(resultObject);
 
         });
-    		console.log(weatherArray);
-        });
 
-  			  
-    
+    		
+    next();
 };
-
-
+//call profile data from database & filter weatherArray
+climate.filterWeatherData = (req, res, next) => {
+	const id = numericParam(req.params, "profileId");
+	db.one(
+        'SELECT * FROM profiles WHERE id=$1', [id]
+    ).then(profile => {
+    	console.log(profile);
+    	next();
+    }).catch(err => {
+        console.error(`error in the climate.filterWeatherData: ${err}`);
+    });
+};
 
 
 
