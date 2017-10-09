@@ -60,7 +60,7 @@ $('#queryFormAdd').on('submit', e => {
       success: response => {
         window.location.replace(`/climate/profiles/${id}/query/2`)
       }, error: msg => {
-        console.log('AJAX called failed', msg);
+        console.log('AJAX call failed', msg);
       }
     });
 
@@ -78,8 +78,9 @@ $('#queryFormDate').on('submit', e => {
       data: dates,
       success: response => {
         window.location.replace(`/climate/profiles/${id}/results`)
-      }, error: msg => {
-        console.log('AJAX called failed', msg);
+      },
+      error: msg => {
+        console.log('AJAX call failed', msg);
       }
     });
 

@@ -196,10 +196,9 @@ climate.getWeatherData = (req, res, next) => {
     			return element.cloudCover
     		}));
     		console.log(resultObject);
-
+            
         });
-
-    		
+    res.locals.resultObject = resultObject;		
     next();
 };
 //call profile data from database & filter weatherArray

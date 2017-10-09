@@ -81,12 +81,24 @@ router.post('/profiles/:profileId/query/2',
 	(req, res) => {
 res.render('climate/result');
 });
-//render results page
+//render delay page
 router.get('/profiles/:profileId/results',
 	auth.restrict,
-	climate.filterWeatherData,
 	(req, res) => {
-	res.render('climate/result', {id: req.params.profileId});
+	res.render('climate/result', {
+		id: req.params.profileId
+	});
+	});
+router.get('/profiles/:profileId/returns',
+	auth.restrict,
+	climate.getWeatherData,
+	(req, res) => {
+		console.log("in controller:", res.locals.resultObject);
+	res.render('climate/returns', {
+		id: req.params.profileId,
+		results: res.locals.resultObject
+		}
+	);
 	});
 //filter data
 // router.post('/profiles/:profileId/results',
