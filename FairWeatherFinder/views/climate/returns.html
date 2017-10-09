@@ -10,8 +10,8 @@
 </head>
 <body>
 	<h1>How did you do?</h1>
-	<p>There were {{counter}} perfect days in your range!</p>
-	<p>These are the average conditions for the __place__ during __time__</p>
+	<p>There were {{counter}} perfect days out of {{length}} checked</p>
+	<p>These were the average conditions for {{address}}</p>
 	{{#results}}
 	<ul>
 		<li>High Temperature: {{hiTemp}} F</li>
@@ -21,7 +21,7 @@
 		<li>Cloud Cover: {{cloudCover}}</li>
 	</ul>
 	{{/results}}
-
+<a href="/climate">Home</a>
 	
 </body>
 </html>

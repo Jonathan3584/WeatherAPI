@@ -98,24 +98,11 @@ router.get('/profiles/:profileId/results/1',
 	res.render('climate/returns', {
 		id: req.params.profileId,
 		results: res.locals.resultObject,
-		counter: res.locals.counter
+		counter: res.locals.counter,
+		address: res.locals.address
 		}
 	);
 	});
-//run filter data function in models
-// router.post('/profiles/:profileId/results/2',
-// 	auth.restrict,
-// 	climate.filterWeatherData,
-// 	(req, res) => {
-// 	res.render('climate/result', {id: req.params.profileId});
-	// });
-//display results of the profile filter
-// router.get('/profiles/:profileId/results/2',
-// 	auth.restrict,
-// 	climate.filterWeatherData,
-// 	(req, res) => {
-// 	res.render('climate/result', {id: req.params.profileId});
-// 	});
 
 
 
