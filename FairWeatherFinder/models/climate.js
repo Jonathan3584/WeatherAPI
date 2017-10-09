@@ -26,6 +26,7 @@ let long = 0;
 //weather arrray and results object to compare to profile
 const weatherArray = [];
 const resultObject = {};
+let daysCounter = 0;
 
 //generic average function
 average = (array) => {
@@ -99,7 +100,7 @@ climate.editProfile = (req, res, next) => {
         loTemp = req.body.loTemp,
         precip = req.body.precipitation,
         maxWind = req.body.maxWind,
-        cloudCover = req.body.cloudConditions,
+        cloudCover = req.body.cloudCover,
         humidity = req.body.humidity;
     db.one(
         'UPDATE profiles SET hiTemp = $1, loTemp = $2, precip = $3, maxWind = $4, cloudCover = $5, humidity = $6 WHERE id = $7 returning id', [hiTemp, loTemp, precip, maxWind, cloudCover, humidity, id]
@@ -150,7 +151,7 @@ climate.getWeatherData = (req, res, next) => {
     const unixStartDate = moment(`${startDate} 12:00`, "YYYY/M/D H:mm").unix();
     const callLength = numericEndDate - numericStartDate;
     console.log('NSD', numericStartDate, 'USD', unixStartDate, 'CL', callLength);
-
+    console.log(`${darkSkiesUrl}${darkSkiesApiKey}/${lat},${long},${unixStartDate}`);
     let weatherPromises = [];
 
     for (let i = 0; i < callLength; i++) {
@@ -196,7 +197,7 @@ climate.getWeatherData = (req, res, next) => {
     			return element.cloudCover
     		}));
     		console.log(resultObject);
-            
+
         });
     res.locals.resultObject = resultObject;		
     next();
@@ -208,6 +209,21 @@ climate.filterWeatherData = (req, res, next) => {
         'SELECT * FROM profiles WHERE id=$1', [id]
     ).then(profile => {
     	console.log(profile);
+        console.log('in filterWeatherData model');
+        console.log(weatherArray);
+        
+        weatherArray.forEach(element => {
+            if (element.hiTemp < profile.hitemp &&
+                element.loTemp > profile.lotemp &&
+                element.precip < profile.precip &&
+                element.maxWind < profile.maxwind &&
+                element.humidity < profile.humidity &&
+                element.cloudCover < profile.cloudcover) {
+                daysCounter = daysCounter +1;
+            };
+        });
+        res.locals.counter = daysCounter;
+        console.log('counter', daysCounter);
     	next();
     }).catch(err => {
         console.error(`error in the climate.filterWeatherData: ${err}`);

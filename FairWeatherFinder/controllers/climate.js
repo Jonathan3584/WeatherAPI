@@ -89,19 +89,28 @@ router.get('/profiles/:profileId/results',
 		id: req.params.profileId
 	});
 	});
-router.get('/profiles/:profileId/returns',
+//display average weather data for date range
+router.get('/profiles/:profileId/results/1',
 	auth.restrict,
 	climate.getWeatherData,
+	climate.filterWeatherData,
 	(req, res) => {
-		console.log("in controller:", res.locals.resultObject);
 	res.render('climate/returns', {
 		id: req.params.profileId,
-		results: res.locals.resultObject
+		results: res.locals.resultObject,
+		counter: res.locals.counter
 		}
 	);
 	});
-//filter data
-// router.post('/profiles/:profileId/results',
+//run filter data function in models
+// router.post('/profiles/:profileId/results/2',
+// 	auth.restrict,
+// 	climate.filterWeatherData,
+// 	(req, res) => {
+// 	res.render('climate/result', {id: req.params.profileId});
+	// });
+//display results of the profile filter
+// router.get('/profiles/:profileId/results/2',
 // 	auth.restrict,
 // 	climate.filterWeatherData,
 // 	(req, res) => {

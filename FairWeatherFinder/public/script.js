@@ -85,8 +85,23 @@ $('#queryFormDate').on('submit', e => {
     });
 
 });
+//Ajax call to filter results and display averages
+$('#filterAndForward').on('click', e => {
+    e.preventDefault();
+    const id = $('#resultsHeader').attr('class');
 
+    $.ajax({
+      method: 'GET',
+      url: `/climate/profiles/${id}/results/1`,
+      success: response => {
+        window.location.replace(`/climate/profiles/${id}/results/1`)
+      },
+      error: msg => {
+        console.log('AJAX call failed', msg);
+      }
+    });
 
+});
 
 
 
