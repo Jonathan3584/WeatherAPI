@@ -52,25 +52,24 @@ $(document).ready(() => {
     $('#queryFormAdd').on('submit', e => {
         e.preventDefault();
         const id = $('#addressHeader').attr('class');
-        const addressInput = $('#addressInput').val();
-        const address2Input = $('#address2Input').val();
-        const address3Input = $('#address3Input').val();
-        const address4Input = $('#address4Input').val();
-        readableAddresses = {
-            address: addressInput.replace(/ /g, '+'),
-            address2: address2Input.replace(/ /g, '+'),
-            address3: address3Input.replace(/ /g, '+'),
-            address4: address4Input.replace(/ /g, '+'),
-            input: addressInput,
-            input2: address2Input,
-            input3: address3Input,
-            input4: address4Input
+        const addressArray = []
+        addressArray.push($('#addressInput').val());
+        if ($('#address2Input').val().length > 0) {
+            addressArray.push($('#address2Input').val());
         };
-        console.log(readableAddresses);
+        if ($('#address3Input').val().length > 0) {
+            addressArray.push($('#address3Input').val());
+        };
+        if ($('#address4Input').val().length > 0) {
+            addressArray.push($('#address4Input').val());
+        };
+        console.log(addressArray);
+        addresses = {addresses: addressArray};
+        console.log(addresses);
         $.ajax({
             method: 'POST',
             url: `/climate/profiles/${id}/query/`,
-            data: readableAddresses,
+            data: addresses,
             success: response => {
                 window.location.replace(`/climate/profiles/${id}/query/2`)
             },

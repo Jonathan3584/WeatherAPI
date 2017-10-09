@@ -64,7 +64,7 @@ router.get('/profiles/:profileId/query',
 //reformat address -- google api
 router.post('/profiles/:profileId/query/', 
 	auth.restrict,
-	climate.convertAddress,
+	climate.convertAddresses,
 	(req, res) => {
 res.render('climate/queryDate');
 	});

@@ -20,14 +20,7 @@ const darkSkiesUrl = "https://api.darksky.net/forecast/";
 const climate = {};
 
 //Global address variables
-let lat1 = 0;
-let long1 = 0;
-let lat2 = 0;
-let long2 = 0;
-let lat3 = 0;
-let long3 = 0;
-let lat4 = 0;
-let long4 = 0;
+const coordinatesArray = [];
 
 //weather arrray and results object to compare to profile
 const weatherArray1 = [];
@@ -50,10 +43,10 @@ let sessionAddress4 = '';
 
 //generic average function
 average = (array) => {
-	let arrSum = array.reduce((sum, value) => {
-		return sum + value; 
-	}, 0);
-	return arrSum/array.length;
+    let arrSum = array.reduce((sum, value) => {
+        return sum + value;
+    }, 0);
+    return arrSum / array.length;
 };
 //Tims' numeric parameters checker -- thanks Tims!
 numericParam = (reqParams, parameterName) => {
@@ -72,7 +65,7 @@ numericParam = (reqParams, parameterName) => {
 };
 //find all profiles to populate user page
 climate.findAllProfiles = (req, res, next) => {
-	const user_id = req.user.id;
+    const user_id = req.user.id;
     db.manyOrNone(
         'SELECT * FROM profiles WHERE user_id = $1', [user_id]
     ).then(profiles => {
@@ -145,80 +138,97 @@ climate.delete = (req, res, next) => {
     });
 };
 //convert address into lat/long using Google Maps API
-climate.convertAddress = (req, res, next) => {
+climate.convertAddresses = (req, res, next) => {
     console.log('firing inside climate.convertAddress');
-    const address = req.body.address;
-    const address2 = req.body.address2;
-    const address3 = req.body.address3;
-    const address4 = req.body.address4;
-    sessionAddress = req.body.input;
-    sessionAddress2 = req.body.input2;
-    sessionAddress3 = req.body.input3;
-    sessionAddress4 = req.body.input4;
-    console.log('inside convertAddress', sessionAddress);
-    console.log('inside convertAddress', sessionAddress2);
-    console.log('inside convertAddress', sessionAddress3);
-    console.log('inside convertAddress', sessionAddress4);
-    axios({
-        url: `${googleApiUrl}?address=${address}&key=${googleApiKey}`,
-        method: 'GET'
-    }).then(addressData => {
-        const locationData = addressData.data.results[0].geometry.location;
-        lat = locationData.lat;
-        long = locationData.lng;
-        console.log('lat: ', lat);
-        console.log('long: ', long);
-        
+    const addressArray = req.body.addresses;
+    console.log("inside convertAddresses", addressArray);
+    const addressPromises = [];
+    // const address2 = req.body.address2;
+    // const address3 = req.body.address3;
+    // const address4 = req.body.address4;
+    // sessionAddress = req.body.input;
+    // sessionAddress2 = req.body.input2;
+    // sessionAddress3 = req.body.input3;
+    // sessionAddress4 = req.body.input4;
+    // console.log('inside convertAddress', sessionAddress);
+    // console.log('inside convertAddress', sessionAddress2);
+    // console.log('inside convertAddress', sessionAddress3);
+    // console.log('inside convertAddress', sessionAddress4);
+
+    for (let i = 0; i < addressArray.length; i++) {
+        let address = addressArray[i].replace(/ /g, '+');
+        console.log(address);
+        addressPromises.push(
+            axios({
+                url: `${googleApiUrl}?address=${address}&key=${googleApiKey}`,
+                method: 'GET'
+            }));
+    };
+
+    axios.all(addressPromises).then(results => {
+        results.forEach(response => {
+            const locationData = response.data.results[0].geometry.location;
+            const coordinates = {};
+            coordinates.lat = locationData.lat;
+            coordinates.long = locationData.lng;
+            console.log('coordinates in loop', coordinates);
+            coordinatesArray.push(coordinates);
+            console.log("coordinates array:", coordinatesArray);
+        }).catch(err => {
+            console.error(`error in climate.convertAddress: ${err}`)
+        });
+
         next();
-    }).catch(err => {
-        console.error(`error in climate.convertAddress: ${err}`)
+
     });
-    if (address2.length > 0){
-        axios({
-        url: `${googleApiUrl}?address=${address2}&key=${googleApiKey}`,
-        method: 'GET'
-    }).then(addressData => {
-        const locationData = addressData.data.results[0].geometry.location;
-        lat2 = locationData.lat;
-        long2 = locationData.lng;
-        console.log('lat2: ', lat2);
-        console.log('long2: ', long2);
-        next();
-    }).catch(err => {
-        console.error(`error in climate.convertAddress2: ${err}`)
-    });
-}
-   if (address3.length > 0){
-        axios({
-        url: `${googleApiUrl}?address=${address3}&key=${googleApiKey}`,
-        method: 'GET'
-    }).then(addressData => {
-        const locationData = addressData.data.results[0].geometry.location;
-        lat3 = locationData.lat;
-        long3 = locationData.lng;
-        console.log('lat3: ', lat3);
-        console.log('long3: ', long3);
-        next();
-    }).catch(err => {
-        console.error(`error in climate.convertAddress3: ${err}`)
-    });
-}
-   if (address4.length > 0){
-        axios({
-        url: `${googleApiUrl}?address=${address4}&key=${googleApiKey}`,
-        method: 'GET'
-    }).then(addressData => {
-        const locationData = addressData.data.results[0].geometry.location;
-        lat4 = locationData.lat;
-        long4 = locationData.lng;
-        console.log('lat4: ', lat4);
-        console.log('long4: ', long4);
-        next();
-    }).catch(err => {
-        console.error(`error in climate.convertAddress4: ${err}`)
-    });
-}
 };
+
+//     if (address2.length > 0){
+//         axios({
+//         url: `${googleApiUrl}?address=${address2}&key=${googleApiKey}`,
+//         method: 'GET'
+//     }).then(addressData => {
+//         const locationData = addressData.data.results[0].geometry.location;
+//         lat2 = locationData.lat;
+//         long2 = locationData.lng;
+//         console.log('lat2: ', lat2);
+//         console.log('long2: ', long2);
+//         next();
+//     }).catch(err => {
+//         console.error(`error in climate.convertAddress2: ${err}`)
+//     });
+// }
+//    if (address3.length > 0){
+//         axios({
+//         url: `${googleApiUrl}?address=${address3}&key=${googleApiKey}`,
+//         method: 'GET'
+//     }).then(addressData => {
+//         const locationData = addressData.data.results[0].geometry.location;
+//         lat3 = locationData.lat;
+//         long3 = locationData.lng;
+//         console.log('lat3: ', lat3);
+//         console.log('long3: ', long3);
+//         next();
+//     }).catch(err => {
+//         console.error(`error in climate.convertAddress3: ${err}`)
+//     });
+// }
+//    if (address4.length > 0){
+//         axios({
+//         url: `${googleApiUrl}?address=${address4}&key=${googleApiKey}`,
+//         method: 'GET'
+//     }).then(addressData => {
+//         const locationData = addressData.data.results[0].geometry.location;
+//         lat4 = locationData.lat;
+//         long4 = locationData.lng;
+//         console.log('lat4: ', lat4);
+//         console.log('long4: ', long4);
+//         next();
+//     }).catch(err => {
+//         console.error(`error in climate.convertAddress4: ${err}`)
+//     });
+//}
+
 //axios call to DARK SKY API to retrieve a block of data
 climate.getWeatherData = (req, res, next) => {
     const startDate = req.body.startDate;
@@ -244,8 +254,8 @@ climate.getWeatherData = (req, res, next) => {
     };
 
     axios.all(weatherPromises).then(results => {
-    	results.forEach(response => {
-        	weatherObject = {};
+        results.forEach(response => {
+            const weatherObject = {};
             const dailyData = response.data.daily.data[0];
             weatherObject.hiTemp = dailyData.temperatureMax;
             weatherObject.loTemp = dailyData.temperatureMin;
@@ -256,30 +266,36 @@ climate.getWeatherData = (req, res, next) => {
             weatherObject.icon = dailyData.icon;
             console.log(weatherObject);
             weatherArray1.push(weatherObject);
-        });
-				resultObject.hiTemp = average(weatherArray.map(element => {
-    			return element.hiTemp
-    		}));
-    		resultObject.loTemp = average(weatherArray.map(element => {
-    			return element.loTemp
-    		}));
-    		resultObject.precip = average(weatherArray.map(element => {
-    			return element.precip
-    		}));
-    		resultObject.maxWind = average(weatherArray.map(element => {
-    			return element.maxWind
-    		}));
-    		resultObject.humidity = average(weatherArray.map(element => {
-    			return element.humidity
-    		}));
-    		resultObject.cloudCover = average(weatherArray.map(element => {
-    			return element.cloudCover
-    		}));
-    		console.log(resultObject);
+        }).catch(err => {
+            console.error(`error in climate.getWeatherData: ${err}`)
+        });;
+        resultObject.hiTemp = average(weatherArray.map(element => {
+            return element.hiTemp
+        }));
+        resultObject.loTemp = average(weatherArray.map(element => {
+            return element.loTemp
+        }));
+        resultObject.precip = average(weatherArray.map(element => {
+            return element.precip
+        }));
+        resultObject.maxWind = average(weatherArray.map(element => {
+            return element.maxWind
+        }));
+        resultObject.humidity = average(weatherArray.map(element => {
+            return element.humidity
+        }));
+        resultObject.cloudCover = average(weatherArray.map(element => {
+            return element.cloudCover
+        }));
+        console.log(resultObject);
 
-        });
-    res.locals.resultObject = resultObject1;		
-     for (let i = 0; i < callLength; i++) {
+    });
+
+
+
+
+    res.locals.resultObject = resultObject1;
+    for (let i = 0; i < callLength; i++) {
         let unixDate = unixStartDate + i * 84600;
         weatherPromises2.push(
             axios({
@@ -303,29 +319,29 @@ climate.getWeatherData = (req, res, next) => {
             console.log(weatherObject2);
             weatherArray2.push(weatherObject2);
         });
-                resultObject2.hiTemp = average(weatherArray2.map(element => {
-                return element.hiTemp
-            }));
-            resultObject2.loTemp = average(weatherArray2.map(element => {
-                return element.loTemp
-            }));
-            resultObject2.precip = average(weatherArray2.map(element => {
-                return element.precip
-            }));
-            resultObject2.maxWind = average(weatherArray2.map(element => {
-                return element.maxWind
-            }));
-            resultObject2.humidity = average(weatherArray2.map(element => {
-                return element.humidity
-            }));
-            resultObject2.cloudCover = average(weatherArray2.map(element => {
-                return element.cloudCover
-            }));
-            console.log(resultObject2);
+        resultObject2.hiTemp = average(weatherArray2.map(element => {
+            return element.hiTemp
+        }));
+        resultObject2.loTemp = average(weatherArray2.map(element => {
+            return element.loTemp
+        }));
+        resultObject2.precip = average(weatherArray2.map(element => {
+            return element.precip
+        }));
+        resultObject2.maxWind = average(weatherArray2.map(element => {
+            return element.maxWind
+        }));
+        resultObject2.humidity = average(weatherArray2.map(element => {
+            return element.humidity
+        }));
+        resultObject2.cloudCover = average(weatherArray2.map(element => {
+            return element.cloudCover
+        }));
+        console.log(resultObject2);
 
-        });
-    res.locals.resultObject2 = resultObject2; 
-     for (let i = 0; i < callLength; i++) {
+    });
+    res.locals.resultObject2 = resultObject2;
+    for (let i = 0; i < callLength; i++) {
         let unixDate = unixStartDate + i * 84600;
         weatherPromises3.push(
             axios({
@@ -349,29 +365,29 @@ climate.getWeatherData = (req, res, next) => {
             console.log(weatherObject3);
             weatherArray3.push(weatherObject3);
         });
-                resultObject3.hiTemp = average(weatherArray3.map(element => {
-                return element.hiTemp
-            }));
-            resultObject3.loTemp = average(weatherArray3.map(element => {
-                return element.loTemp
-            }));
-            resultObject3.precip = average(weatherArray3.map(element => {
-                return element.precip
-            }));
-            resultObject3.maxWind = average(weatherArray3.map(element => {
-                return element.maxWind
-            }));
-            resultObject3.humidity = average(weatherArray3.map(element => {
-                return element.humidity
-            }));
-            resultObject3.cloudCover = average(weatherArray3.map(element => {
-                return element.cloudCover
-            }));
-            console.log(resultObject3);
+        resultObject3.hiTemp = average(weatherArray3.map(element => {
+            return element.hiTemp
+        }));
+        resultObject3.loTemp = average(weatherArray3.map(element => {
+            return element.loTemp
+        }));
+        resultObject3.precip = average(weatherArray3.map(element => {
+            return element.precip
+        }));
+        resultObject3.maxWind = average(weatherArray3.map(element => {
+            return element.maxWind
+        }));
+        resultObject3.humidity = average(weatherArray3.map(element => {
+            return element.humidity
+        }));
+        resultObject3.cloudCover = average(weatherArray3.map(element => {
+            return element.cloudCover
+        }));
+        console.log(resultObject3);
 
-        });
-    res.locals.resultObject3 = resultObject3; 
-     for (let i = 0; i < callLength; i++) {
+    });
+    res.locals.resultObject3 = resultObject3;
+    for (let i = 0; i < callLength; i++) {
         let unixDate = unixStartDate + i * 84600;
         weatherPromises4.push(
             axios({
@@ -395,41 +411,41 @@ climate.getWeatherData = (req, res, next) => {
             console.log(weatherObject4);
             weatherArray4.push(weatherObject4);
         });
-                resultObject4.hiTemp = average(weatherArray4.map(element => {
-                return element.hiTemp
-            }));
-            resultObject4.loTemp = average(weatherArray4.map(element => {
-                return element.loTemp
-            }));
-            resultObject4.precip = average(weatherArray4.map(element => {
-                return element.precip
-            }));
-            resultObject4.maxWind = average(weatherArray4.map(element => {
-                return element.maxWind
-            }));
-            resultObject4.humidity = average(weatherArray4.map(element => {
-                return element.humidity
-            }));
-            resultObject4.cloudCover = average(weatherArray4.map(element => {
-                return element.cloudCover
-            }));
-            console.log(resultObject4);
+        resultObject4.hiTemp = average(weatherArray4.map(element => {
+            return element.hiTemp
+        }));
+        resultObject4.loTemp = average(weatherArray4.map(element => {
+            return element.loTemp
+        }));
+        resultObject4.precip = average(weatherArray4.map(element => {
+            return element.precip
+        }));
+        resultObject4.maxWind = average(weatherArray4.map(element => {
+            return element.maxWind
+        }));
+        resultObject4.humidity = average(weatherArray4.map(element => {
+            return element.humidity
+        }));
+        resultObject4.cloudCover = average(weatherArray4.map(element => {
+            return element.cloudCover
+        }));
+        console.log(resultObject4);
 
-        });
-    res.locals.resultObject4 = resultObject4; 
+    });
+    res.locals.resultObject4 = resultObject4;
     next();
 };
 //call profile data from database & filter weatherArray
 climate.filterWeatherData = (req, res, next) => {
-	const id = numericParam(req.params, "profileId");
-	db.one(
+    const id = numericParam(req.params, "profileId");
+    db.one(
         'SELECT * FROM profiles WHERE id=$1', [id]
     ).then(profile => {
         daysCounter = 0;
-    	console.log(profile);
+        console.log(profile);
         console.log('in filterWeatherData model');
         console.log(weatherArray);
-        
+
         weatherArray.forEach(element => {
             if (element.hiTemp < profile.hitemp &&
                 element.loTemp > profile.lotemp &&
@@ -437,7 +453,7 @@ climate.filterWeatherData = (req, res, next) => {
                 element.maxWind < profile.maxwind &&
                 element.humidity < profile.humidity &&
                 element.cloudCover < profile.cloudcover) {
-                daysCounter = daysCounter +1;
+                daysCounter = daysCounter + 1;
             };
         });
         res.locals.counter = daysCounter;
@@ -446,7 +462,7 @@ climate.filterWeatherData = (req, res, next) => {
         console.log(sessionAddress);
         console.log('counter', daysCounter);
         console.log('days Checked ', weatherArray.length);
-    	next();
+        next();
     }).catch(err => {
         console.error(`error in the climate.filterWeatherData: ${err}`);
     });
