@@ -93,7 +93,7 @@ $(document).ready(() => {
             url: `/climate/profiles/${id}/query/2`,
             data: dates,
             success: response => {
-                window.location.replace(`/climate/profiles/${id}/results`)
+                window.location.replace(`/climate/profiles/${id}/results`);
             },
             error: msg => {
                 console.log('AJAX call failed', msg);

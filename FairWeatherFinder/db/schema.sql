@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS profiles CASCADE;
+
+
+
 CREATE TABLE users (
   id BIGSERIAL PRIMARY KEY,
   email VARCHAR NOT NULL UNIQUE,
@@ -7,10 +12,10 @@ CREATE TABLE profiles (
 	id BIGSERIAL PRIMARY KEY,
 	user_id BIGSERIAL REFERENCES users(id),
 	name VARCHAR NOT NULL,
-	hiTemp INT NOT NULL,
-	loTemp INT NOT NULL,
-	precip INT NOT NULL,
-	maxWind INT NOT NULL,
-	humidity INT NOT NULL,
-	cloudCover INT NOT NULL
+	hiTemp FLOAT NOT NULL,
+	loTemp FLOAT NOT NULL,
+	precip FLOAT NOT NULL,
+	maxWind FLOAT NOT NULL,
+	humidity FLOAT NOT NULL,
+	cloudCover FLOAT NOT NULL
 );
