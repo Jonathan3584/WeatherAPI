@@ -143,18 +143,7 @@ climate.convertAddresses = (req, res, next) => {
     const addressArray = req.body.addresses;
     console.log("inside convertAddresses", addressArray);
     const addressPromises = [];
-    // const address2 = req.body.address2;
-    // const address3 = req.body.address3;
-    // const address4 = req.body.address4;
-    // sessionAddress = req.body.input;
-    // sessionAddress2 = req.body.input2;
-    // sessionAddress3 = req.body.input3;
-    // sessionAddress4 = req.body.input4;
-    // console.log('inside convertAddress', sessionAddress);
-    // console.log('inside convertAddress', sessionAddress2);
-    // console.log('inside convertAddress', sessionAddress3);
-    // console.log('inside convertAddress', sessionAddress4);
-
+  
     for (let i = 0; i < addressArray.length; i++) {
         let address = addressArray[i].replace(/ /g, '+');
         console.log(address);
@@ -174,60 +163,12 @@ climate.convertAddresses = (req, res, next) => {
             console.log('coordinates in loop', coordinates);
             coordinatesArray.push(coordinates);
             console.log("coordinates array:", coordinatesArray);
-        }).catch(err => {
-            console.error(`error in climate.convertAddress: ${err}`)
         });
+    })
 
-        next();
+    next();
 
-    });
 };
-
-//     if (address2.length > 0){
-//         axios({
-//         url: `${googleApiUrl}?address=${address2}&key=${googleApiKey}`,
-//         method: 'GET'
-//     }).then(addressData => {
-//         const locationData = addressData.data.results[0].geometry.location;
-//         lat2 = locationData.lat;
-//         long2 = locationData.lng;
-//         console.log('lat2: ', lat2);
-//         console.log('long2: ', long2);
-//         next();
-//     }).catch(err => {
-//         console.error(`error in climate.convertAddress2: ${err}`)
-//     });
-// }
-//    if (address3.length > 0){
-//         axios({
-//         url: `${googleApiUrl}?address=${address3}&key=${googleApiKey}`,
-//         method: 'GET'
-//     }).then(addressData => {
-//         const locationData = addressData.data.results[0].geometry.location;
-//         lat3 = locationData.lat;
-//         long3 = locationData.lng;
-//         console.log('lat3: ', lat3);
-//         console.log('long3: ', long3);
-//         next();
-//     }).catch(err => {
-//         console.error(`error in climate.convertAddress3: ${err}`)
-//     });
-// }
-//    if (address4.length > 0){
-//         axios({
-//         url: `${googleApiUrl}?address=${address4}&key=${googleApiKey}`,
-//         method: 'GET'
-//     }).then(addressData => {
-//         const locationData = addressData.data.results[0].geometry.location;
-//         lat4 = locationData.lat;
-//         long4 = locationData.lng;
-//         console.log('lat4: ', lat4);
-//         console.log('long4: ', long4);
-//         next();
-//     }).catch(err => {
-//         console.error(`error in climate.convertAddress4: ${err}`)
-//     });
-//}
 
 //axios call to DARK SKY API to retrieve a block of data
 climate.getWeatherData = (req, res, next) => {
@@ -266,9 +207,7 @@ climate.getWeatherData = (req, res, next) => {
             weatherObject.icon = dailyData.icon;
             console.log(weatherObject);
             weatherArray1.push(weatherObject);
-        }).catch(err => {
-            console.error(`error in climate.getWeatherData: ${err}`)
-        });;
+        })
         resultObject.hiTemp = average(weatherArray.map(element => {
             return element.hiTemp
         }));
