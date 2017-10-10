@@ -29,6 +29,7 @@
     "winston": "^2.4.0"
   },
   "engines": {
-    "node": "6.11.2" 
-  }
+    "node": "6.11.2"
+  },
+  "devDependencies": {}
 }
