@@ -24,23 +24,14 @@ const coordinatesArray = [];
 
 //weather arrray and results object to compare to profile
 
-const metaWeatherArray = [];
-const resultObjectArray = [];
-// const weatherArray2 = [];
-// const resultObject2 = {};
-// const weatherArray3 = [];
-// const resultObject3 = {};
-// const weatherArray4 = [];
-// const resultObject4 = {};
+let metaWeatherArray = [];
+let resultObjectArray = [];
 
-//daysCounter will get us a sum of days that meet conditions
-let daysCounter = 0;
+//active profile
+let activeProfile = {};
 
 // //server-side address storage
-let sessionAddress = '';
-let sessionAddress2 = '';
-let sessionAddress3 = '';
-let sessionAddress4 = '';
+let sessionAddress = [];
 
 //generic average function
 average = (array) => {
@@ -66,6 +57,7 @@ numericParam = (reqParams, parameterName) => {
 };
 //find all profiles to populate user page
 climate.findAllProfiles = (req, res, next) => {
+
     const user_id = req.user.id;
     db.manyOrNone(
         'SELECT * FROM profiles WHERE user_id = $1', [user_id]
@@ -78,11 +70,15 @@ climate.findAllProfiles = (req, res, next) => {
 };
 //db call to get profile by name
 climate.findProfileById = (req, res, next) => {
+    resultObjectArray = [];
+    sessionAddress = [];
+    metaWeatherArray = [];
     const id = numericParam(req.params, "profileId");
     db.oneOrNone(
         'SELECT * FROM profiles WHERE id=$1', [id]
     ).then(profile => {
         res.locals.profile = profile;
+        activeProfile = profile;
         next();
     }).catch(err => {
         console.error(`error in the climate.findProfileById: ${err}`)
@@ -142,16 +138,16 @@ climate.delete = (req, res, next) => {
 climate.convertAddresses = (req, res, next) => {
     console.log('firing inside climate.convertAddress');
     const addressArray = req.body.addresses;
-    sessionAddress = req.body.addresses[0];
-    if(addressArray.length > 1){ sessionAddress2 = req.body.addresses[1]; };
-    if(addressArray.length > 2){ sessionAddress3 = req.body.addresses[2]; };
-    if(addressArray.length > 3){ sessionAddress4 = req.body.addresses[3]; };
+    sessionAddress.push(req.body.addresses[0]);
+    if (addressArray.length > 1) { sessionAddress.push(req.body.addresses[1]); };
+    if (addressArray.length > 2) { sessionAddress.push(req.body.addresses[2]); };
+    if (addressArray.length > 3) { sessionAddress.push(req.body.addresses[3]); };
     console.log("inside convertAddresses", addressArray);
     const addressPromises = [];
-  
+
     // for (let i = 0; i < addressArray.length; i++) {
 
-        addressArray.forEach(element => {
+    addressArray.forEach(element => {
         let address = element.replace(/ /g, '+');
         console.log(address);
         addressPromises.push(
@@ -186,7 +182,7 @@ climate.getWeatherData = (req, res, next) => {
     const unixStartDate = moment(`${startDate} 12:00`, "YYYY/M/D H:mm").unix();
     const callLength = numericEndDate - numericStartDate;
     console.log('NSD', numericStartDate, 'USD', unixStartDate, 'CL', callLength);
-    
+
 
     coordinatesArray.forEach(element => {
         const lat = element.lat;
@@ -196,105 +192,97 @@ climate.getWeatherData = (req, res, next) => {
         const weatherArray = [];
         const resultObject = {};
         console.log(`${darkSkiesUrl}${darkSkiesApiKey}/${lat},${long},${unixStartDate}`);
-    
 
-    let weatherPromises = [];
-   
-    for (let i = 0; i < callLength; i++) {
-        let unixDate = unixStartDate + i * 84600;
-        weatherPromises.push(
-            axios({
-                url: `${darkSkiesUrl}${darkSkiesApiKey}/${lat},${long},${unixDate}`,
-                method: 'GET'
-            })
-        );
-    };
 
-    axios.all(weatherPromises).then(results => {
+        let weatherPromises = [];
 
-        results.forEach(response => {
-            const weatherObject = {};
-            const dailyData = response.data.daily.data[0];
-            weatherObject.hiTemp = dailyData.temperatureMax;
-            weatherObject.loTemp = dailyData.temperatureMin;
-            weatherObject.precip = dailyData.precipIntensityMax;
-            weatherObject.maxWind = dailyData.windSpeed;
-            weatherObject.humidity = dailyData.humidity;
-            weatherObject.cloudCover = dailyData.cloudCover;
-            weatherObject.icon = dailyData.icon;
-            console.log(weatherObject);
-            weatherArray.push(weatherObject);
+        for (let i = 0; i < callLength; i++) {
+            let unixDate = unixStartDate + i * 84600;
+            weatherPromises.push(
+                axios({
+                    url: `${darkSkiesUrl}${darkSkiesApiKey}/${lat},${long},${unixDate}`,
+                    method: 'GET'
+                })
+            );
+        };
 
+        axios.all(weatherPromises).then(results => {
+
+            results.forEach(response => {
+                const weatherObject = {};
+                const dailyData = response.data.daily.data[0];
+                weatherObject.hiTemp = dailyData.temperatureMax;
+                weatherObject.loTemp = dailyData.temperatureMin;
+                weatherObject.precip = dailyData.precipIntensityMax;
+                weatherObject.maxWind = dailyData.windSpeed;
+                weatherObject.humidity = dailyData.humidity;
+                weatherObject.cloudCover = dailyData.cloudCover;
+                weatherObject.icon = dailyData.icon;
+                console.log(weatherObject);
+                weatherArray.push(weatherObject);
+
+            });
+
+            resultObject.hiTemp = parseInt(average(weatherArray.map(element => {
+                return element.hiTemp
+            })));
+            resultObject.loTemp = parseInt(average(weatherArray.map(element => {
+                return element.loTemp
+            })));
+
+            resultObjectArray.push(resultObject);
+
+            console.log('in getWeatherData: ', metaWeatherArray);
+            console.log('in getWeatherData: ', resultObjectArray);
         });
+        metaWeatherArray.push(weatherArray);
 
-        resultObject.hiTemp = average(weatherArray.map(element => {
-            return element.hiTemp
-        }));
-        resultObject.loTemp = average(weatherArray.map(element => {
-            return element.loTemp
-        }));
-        resultObject.precip = average(weatherArray.map(element => {
-            return element.precip
-        }));
-        resultObject.maxWind = average(weatherArray.map(element => {
-            return element.maxWind
-        }));
-        resultObject.humidity = average(weatherArray.map(element => {
-            return element.humidity
-        }));
-        resultObject.cloudCover = average(weatherArray.map(element => {
-            return element.cloudCover
-        }));
-        
-        resultObjectArray.push(resultObject);
-    
-        console.log('in getWeatherData: ', metaWeatherArray);
-        console.log('in getWeatherData: ', resultObjectArray);         
-});
-  metaWeatherArray.push(weatherArray);
 
-});
-next();
+    });
+    next();
 };
 
 
 //call profile data from database & filter weatherArray
 climate.filterWeatherData = (req, res, next) => {
-    const id = numericParam(req.params, "profileId");
-    db.one(
-        'SELECT * FROM profiles WHERE id=$1', [id]
-    ).then(profile => {
-        daysCounter = 0;
-        console.log(profile);
-        console.log('in filterWeatherData model');
-        console.log(metaWeatherArray);
+    let perfectDaysArray = [];
 
-//         metaWeatherArray.forEach(location => {
+    console.log(activeProfile);
+    console.log('in filterWeatherData model');
 
-//         location.forEach(element => {
-//             if (element.hiTemp < profile.hitemp &&
-//                 element.loTemp > profile.lotemp &&
-//                 element.precip < profile.precip &&
-//                 element.maxWind < profile.maxwind &&
-//                 element.humidity < profile.humidity &&
-//                 element.cloudCover < profile.cloudcover) {
-//                 daysCounter = daysCounter + 1;
-//             };
-//         });
-//         res.locals.counter = daysCounter;
-//         res.locals.length = weatherArray.length;
-//         res.locals.address = sessionAddress;
-//         console.log(sessionAddress);
-//         console.log('counter', daysCounter);
-//         console.log('days Checked ', weatherArray.length);
+    metaWeatherArray.forEach(location => {
+        if (location.length > 0) {
+            let daysCounter = 0;
+            location.forEach(element => {
+                if (element.hiTemp < activeProfile.hitemp &&
+                    element.loTemp > activeProfile.lotemp &&
+                    element.precip < activeProfile.precip &&
+                    element.maxWind < activeProfile.maxwind &&
+                    element.humidity < activeProfile.humidity &&
+                    element.cloudCover < activeProfile.cloudcover) {
+                    daysCounter = daysCounter + 1;
+                };
+            });
 
+            perfectDaysArray.push(daysCounter);
+        }
 
-// })
-
-    //     next();
-    // }).catch(err => {
-    //     console.error(`error in the climate.filterWeatherData: ${err}`);
     });
+
+    res.locals.counter = perfectDaysArray;
+    res.locals.length = metaWeatherArray[0].length;
+    res.locals.address = sessionAddress;
+    res.locals.results = resultObjectArray;
+
+    console.log(res.locals.address);
+    console.log('counter', perfectDaysArray);
+    console.log('days Checked ', metaWeatherArray[0].length);
+
+
+
+
+
+    next();
 };
 
 

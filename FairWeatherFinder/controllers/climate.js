@@ -97,9 +97,19 @@ router.get('/profiles/:profileId/results/1',
 	(req, res) => {
 	res.render('climate/returns', {
 		id: req.params.profileId,
-		results: res.locals.resultObject,
-		counter: res.locals.counter,
-		address: res.locals.address
+		length: res.locals.length,
+		address1: res.locals.address[0],
+		counter1: res.locals.counter[0],
+		results1: res.locals.results[0],
+		address2: res.locals.address[1],
+		counter2: res.locals.counter[1],
+		results2: res.locals.results[1],
+		address3: res.locals.address[2],
+		counter3: res.locals.counter[2],
+		results3: res.locals.results[2],
+		address4: res.locals.address[3],
+		counter4: res.locals.counter[3],
+		results4: res.locals.results[3]
 		}
 	);
 	});
