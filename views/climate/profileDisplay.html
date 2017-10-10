@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/style.css">
+   <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Indie+Flower|Ribeye+Marrow|Modak" rel="stylesheet">
+    <script type="text/javascript" src="/jquery.js"></script>
+    <script type="text/javascript" src="/script.js"></script>
+    <title>{{name}}</title>
+</head>
+
+<body>
+    <div id="container">
+  {{#profile}}
+    <div>
+        <h1 class="">{{name}}</h1>
+        <p>Keep it between {{hitmp}} and {{lotemp}}</p>
+        <p>No more than {{precip}}" of rainfall per day</p>
+        <p>Maximum wind speed {{maxwind}}mph</p>
+        <div>
+            <a href="./{{id}}/query">Use these preferences</a>
+        </div>
+        <div>
+            <a href="./{{id}}/edit">Edit these preferences</a>
+        </div>
+        <div>
+            <p></p>
+            <button id="deleteButton" class="{{id}}">Delete profile</button>
+        </div>
+    </div>
+    {{/profile}}
+    </div>
+    <footer>
+        <a href="https://darksky.net/poweredby/">powered by dark sky</a>
+    </footer>
+</body>
+
+</html>

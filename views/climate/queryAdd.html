@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="en">
+<head>
+	<meta charset="UTF-8">
+	 <link rel="stylesheet" href="/style.css">
+	 <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Indie+Flower|Ribeye+Marrow|Modak" rel="stylesheet">
+    <script type="text/javascript" src="/jquery.js"></script>
+    <script type="text/javascript" src="/script.js"></script>
+
+	<title>Location</title>
+</head>
+<body>
+	<div id="container">
+	<h1 id="addressHeader" class={{id}}>Where are we looking into?</h1>
+
+	<p>Make sure your address is in standard Postal format</p>
+	<form action="query" method ="GET" id="queryFormAdd">
+
+		<label for="address">Address</label>
+		<input placeholder="10 E 21st St, New York, NY 10010" name="address" id="addressInput" type="text">
+		<br>
+		<label for="address2">Address2</label>
+		<input placeholder="Optional" name="address2" id="address2Input" type="text">
+		<br>
+		<label for="address3">Address3</label>
+		<input placeholder="Optional" name="address3" id="address3Input" type="text">
+		<br>
+		<label for="address4">Address4</label>
+		<input placeholder="Optional" name="address4" id="address4Input" type="text">
+		<br>
+		<button type="submit">Use these addresses</button>
+	</form>	
+	</div>
+	<footer>
+		<a href="https://darksky.net/poweredby/">powered by dark sky</a>
+	</footer>
+</body>
+</html>

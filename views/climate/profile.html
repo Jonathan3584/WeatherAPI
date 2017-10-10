@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	 <link rel="stylesheet" href="/style.css">
+	 <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Indie+Flower|Ribeye+Marrow|Modak" rel="stylesheet">
+    <script type="text/javascript" src="/jquery.js"></script>
+    <script type="text/javascript" src="/script.js"></script>
+
+	<title></title>
+</head>
+<body>
+	<div id="container">
+	<h1>Your Climate Profile</h1>
+	<form action="./new" method="POST" id="newProfileForm">
+		<label for="profileName">Profile Name</label>
+		<input placeholder="Spring Break" name="profileName" id="profileName" type="text">
+		<br>
+		<label for="hiTemp">High Temperature</label>
+		<input placeholder="70" name="hiTemp" id="hiTemp" type="text">
+		<br>
+		<label for="loTemp">Low Temperature</label>
+		<input placeholder="55" name="loTemp" id="loTemp" type="text">
+		<br>
+		<label for="precipitation">How much rain is acceptable?</label>
+		<select name="precipitation" id="precipitation">
+  		<option value="0.0001">None, thanks</option>
+  		<option value="0.001">A sprinkle won't ruin my day</option>
+  		<option value="0.01">A little rain is refreshing</option>
+  		<option value="1">I don't mind at all</option>
+		</select>
+		<br>
+		<label for="humidity">Humidity Averse?</label>
+		<select name="humidity" id="humidity">
+  		<option value="0.6">Keep it dry</option>
+  		<option value="0.7">A little moisture is okay</option>
+  		<option value="0.8">I like a good foggy morning</option>
+  		<option value="0.9">I could live in a rainforest</option>
+		</select>
+		<br>
+		<label for="maxWind">Thoughts on the wind?</label>
+		<select name="maxWind" id="maxWind">
+  		<option value="3">Still, please</option>
+  		<option value="6">I'm not a fall leaf</option>
+  		<option value="10">I like a good breeze</option>
+  		<option value="15">I barely notice</option>
+		</select>
+		<br>
+		<label for="cloudCover">Cloud Conditions</label>
+		<select name="cloudCover" id="cloudCover">
+  		<option value="0.1">Sunny</option>
+  		<option value="0.25">Partly Cloudy</option>
+  		<option value="0.5">Mostly Cloudy</option>
+  		<option value="0.75">Overcast</option>
+		</select>
+		<br>
+		<button href="" type="submit">Submit</button>
+
+	</form>
+	</div>
+	<footer>
+		<a href="https://darksky.net/poweredby/">powered by dark sky</a>
+	</footer>
+</body>
+</html>
