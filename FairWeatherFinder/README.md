@@ -16,6 +16,8 @@ User stories:
 
 -I have a week's vacation and know I want to go to Portland, ME.  When should I schedule it?
 
+-I am a wedding planner or filming scout comparing possible locations and dates in order to schedule large events.
+
 My minimum viable product has the following attributes:
 
 -User registration and profile retention
@@ -29,7 +31,7 @@ My reach goals include:
 -Reverse search that allows you to find locations by climate
 -Storage of multiple weather preference profiles
 -Find the intersection of two preference sets --ideal locations for a couple
--Climate snapshot that sets preferecne profile to weather data of current location and time
+-Climate snapshot that sets preference profile to weather data of current location and time
 -Weighted preferences (avoiding precipitation is twice as important as high temps to user 1, but less important than low temps to user 2)
 -Ranged preferences -- (user 1 has a very specific temperature range before she gets too hot or too cold, but user 2 is okay with any temp over 65)
 
@@ -62,7 +64,7 @@ Express-session,
 Cookie-parser,
 Bcrypt,
 Cookie-parser,
-RESTify
+Moment
 
 Wire Frames:
 Landing page: https://wireframe.cc/EHPtES

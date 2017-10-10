@@ -70,9 +70,7 @@ climate.findAllProfiles = (req, res, next) => {
 };
 //db call to get profile by name
 climate.findProfileById = (req, res, next) => {
-    resultObjectArray = [];
-    sessionAddress = [];
-    metaWeatherArray = [];
+    
     const id = numericParam(req.params, "profileId");
     db.oneOrNone(
         'SELECT * FROM profiles WHERE id=$1', [id]
@@ -136,6 +134,9 @@ climate.delete = (req, res, next) => {
 };
 //convert address into lat/long using Google Maps API
 climate.convertAddresses = (req, res, next) => {
+    resultObjectArray = [];
+    sessionAddress = [];
+    metaWeatherArray = [];
     console.log('firing inside climate.convertAddress');
     const addressArray = req.body.addresses;
     sessionAddress.push(req.body.addresses[0]);

@@ -1,6 +1,40 @@
 $(document).ready(() => {
     console.log('script loaded');
 
+
+
+$('#newProfileForm').on('submit', e => {
+        e.preventDefault();
+        const name = $('#profileName').val(),
+            hiTemp = $('#hiTemp').val(),
+            loTemp = $('#loTemp').val(),
+            precipitation = $('#precipitation').val(),
+            humidity = $('#humidity').val(),
+            maxWind = $('#maxWind').val(),
+            cloudCover = $('#cloudCover').val();
+        const newProfileData = {
+            profileName: name,
+            hiTemp: hiTemp,
+            loTemp: loTemp,
+            precipitation: precipitation,
+            maxWind: maxWind,
+            humidity: humidity,
+            cloudCover: cloudCover
+        };
+        $.ajax({
+            method: 'POST',
+            url: `/climate/profiles/new`,
+            data: newProfileData,
+            success: response => {
+                console.log(response);
+                window.location.replace(`/climate`)
+            },
+            error: msg => {
+                console.log(msg);
+            }
+        });
+
+    });
     //Ajax call to run PUT route on editing existing weather profile
     $('#editProfileForm').on('submit', e => {
         e.preventDefault();
