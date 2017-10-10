@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8">
    <link rel="stylesheet" href="/style.css">
+   <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Indie+Flower|Ribeye+Marrow|Modak" rel="stylesheet">
     <script type="text/javascript" src="/jquery.js"></script>
     <script type="text/javascript" src="/script.js"></script>
 
   <title>Perfect Day</title>
   <body>
-
-  <div>
+  <div id="container">
+    <h1>perfect day</h1>
     <form action="new" method="POST">
       <label for="email">Email</label>
       <input id="email" type="text" name="user[email]" placeholder="email"><br>
@@ -17,7 +18,7 @@
       <label for="password">Password</label>
       <input id="password" type="text" name="user[password]" placeholder="password"><br>
 
-      <input type="submit" value="Sign Up">
+      <button type="submit" value="Sign Up"></button>
     </form>
   </div>
 </body>

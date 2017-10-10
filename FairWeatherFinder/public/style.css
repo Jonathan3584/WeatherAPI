@@ -1,0 +1,62 @@
+body {
+	text-align: center;
+	align-content: center;
+	background-color: cornflowerblue;
+	margin: auto;
+}
+#container {
+	width: ;
+	margin: auto;
+
+}
+
+
+h1 {
+font-family: 'Ribeye Marrow', cursive;
+
+color: white;
+}
+h2{
+	font-family: 'Indie Flower', cursive;
+	color: white;
+}
+h3{
+	font-family: 'Indie Flower', cursive;
+	color: white;
+}
+p {
+	font-family: 'Indie Flower', cursive;
+	color: white;
+}
+label {
+	font-family: 'Indie Flower', cursive;
+	color: white;
+}
+a {
+	font-family: 'Indie Flower', cursive;
+	color: white;
+}
+input {
+	border-radius: 5px;
+	padding: 2px;
+	margin: 10px;
+
+}
+select {
+	border-radius: 3px;
+}
+button {
+	font-family: 'Indie Flower', cursive;
+	border-radius: 5px;
+	color: white;
+}
+ul {
+	list-style: none;
+		font-family: 'Indie Flower', cursive;
+	color: white;
+}
+
+/*font-family: 'Ribeye Marrow', cursive;
+*/
+
+/*font-family: 'Modak', cursive;*/

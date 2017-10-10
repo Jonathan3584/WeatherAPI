@@ -3,23 +3,24 @@
 <head>
 	<meta charset="UTF-8">
 	 <link rel="stylesheet" href="/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Indie+Flower|Ribeye+Marrow|Modak" rel="stylesheet">
     <script type="text/javascript" src="/jquery.js"></script>
     <script type="text/javascript" src="/script.js"></script>
 
-	<title>Perfect Day</title>
+	<title>perfect day</title>
 </head>
 <body>
-	<div>
-      <h1 class="">Perfect Day</h1>
-      <p>Welcome!  Perfect Day is a climate information app.</p>
+	<div id="container">
+      <h1 class="">perfect day</h1>
+      <p>Sign-up or log-in to find your perfect day</p>
       <form action="users/login" method="post">
-        <input placeholder="username" name="user[email]" type="text">
-        <input placeholder="password" name="user[password]" type="text">
-        <input type="submit" value="Login">
+        <input placeholder="username" name="user[email]" type="text"><br>
+        <input placeholder="password" name="user[password]" type="password"><br>
+        <button type="submit" value="Login">log-in</button>
       </form>
 
       <div class="text-center">
-        <a href="users/new"><small>Sign Up</small></a>
+        <a href="users/new"><small>sign up</small></a>
       </div>
     </div>
 </body> 

@@ -4,17 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/style.css">
+   <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Indie+Flower|Ribeye+Marrow|Modak" rel="stylesheet">
     <script type="text/javascript" src="/jquery.js"></script>
     <script type="text/javascript" src="/script.js"></script>
     <title>{{name}}</title>
 </head>
 
 <body>
+    <div id="container">
   {{#profile}}
     <div>
         <h1 class="">{{name}}</h1>
-        <div>{{hitemp}} is the most I enjoy!</div>
-        <div>Below {{lotemp}} and I'll freeze!</div>
+        <p>Keep it between {{hitemp}} and {{lotemp}}</p>
         <div>
             <a href="./{{id}}/query">Use this profile!</a>
         </div>
@@ -26,6 +27,7 @@
         </div>
     </div>
     {{/profile}}
+    </div>
 </body>
 
 </html>

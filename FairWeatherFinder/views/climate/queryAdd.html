@@ -1,17 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 	<meta charset="UTF-8">
 	 <link rel="stylesheet" href="/style.css">
+	 <link href="https://fonts.googleapis.com/css?family=Amatic+SC|Indie+Flower|Ribeye+Marrow|Modak" rel="stylesheet">
     <script type="text/javascript" src="/jquery.js"></script>
     <script type="text/javascript" src="/script.js"></script>
 
 	<title>Location</title>
 </head>
 <body>
+	<div id="container">
 	<h1 id="addressHeader" class={{id}}>Where are we looking into?</h1>
 
-	<p>A note about addresses -- the API behind this site is pretty good at what it does, but make sure your address is in standard Postal format.</p>
+	<p>Make sure your address is in standard Postal format</p>
 	<form action="query" method ="GET" id="queryFormAdd">
 
 		<label for="address">Address</label>
@@ -28,5 +29,6 @@
 		<br>
 		<button type="submit">Use these addresses</button>
 	</form>	
+	</div>
 </body>
 </html>
